@@ -1,0 +1,57 @@
+.alignRight{
+    float: right;
+    margin-right: 10px;
+    margin-top: 5px;
+    height: 15px;
+}
+
+.alignLeft{
+    float: left;
+    margin-left: 20px;
+    margin-top: 5px;
+    height: 25px;
+}
+
+.mainLabel{
+    margin: 10px 20px;
+    text-align: center;
+}
+
+.box{
+    border: 1px solid saddlebrown;
+    border-radius: 15px;
+    width: 300px;
+    height: 200px;
+    position: absolute;
+    background-color: moccasin;
+}
+
+.button{
+    padding: 10px 20px;
+    font-size: 24px;
+    text-align: center;
+    background-color: moccasin;
+    border: 3px solid saddlebrown;
+    border-radius: 15px;
+    box-shadow: 0 5px #999;
+    position: absolute;
+    margin-top: 250px;
+    margin-left: 360px;
+    outline: none;
+}
+
+.button:hover{
+    background-color: chocolate;
+}
+
+.button:active{
+    background-color: chocolate;
+    box-shadow: 0 2px #666;
+    transform: translateY(4px);
+}
+
+#rectanglesCanvas{
+    position: absolute;
+    margin-top: 400px;
+    margin-left: 300px;
+}

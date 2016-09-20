@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rectangles</title>
+
+    <!----------------- CSS stylesheet --------------->
+    <link rel="stylesheet" type="text/css" href="app.css">
+
+
+    <!----------------- libraries -------------------->
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+
+    <!----------------- rectangles ------------------->
+    <script src="app/app.js"></script>
+
+</head>
+<body>
+
+<div>
+    <div class="box" style=" margin-left: 100px;">
+        <div class="mainLabel"> Please enter coordinates of a rectangle no. 1:</div>
+
+        <label class="alignLeft">X : </label><input class="alignRight" type="number" id="inputX" ;> <br>
+        <label class="alignLeft">Y : </label><input class="alignRight" type="number" id="inputY" ;> <br>
+        <label class="alignLeft">Width : </label><input class="alignRight" type="number" id="inputWidth" ;> <br>
+        <label class="alignLeft">Height : </label><input class="alignRight" type="number" id="inputHeight" ;> <br>
+
+
+    </div>
+
+
+    <div class="box" style="margin-left: 450px;">
+        <div class="mainLabel"> Please enter coordinates of a rectangle no. 2:</div>
+
+        <label class="alignLeft">X : </label><input class="alignRight" type="number" id="inputX2"> <br>
+        <label class="alignLeft">Y : </label><input class="alignRight" type="number" id="inputY2"> <br>
+        <label class="alignLeft">Width : </label><input class="alignRight" type="number" id="inputWidth2"> <br>
+        <label class="alignLeft">Height : </label><input class="alignRight" type="number" id="inputHeight2"> <br>
+    </div>
+
+    <button class="button" id="submit" data-role="button">Submit</button>
+
+    <canvas id="rectanglesCanvas" width="300" height="300" style="border: 1px solid black;"></canvas>
+</div>
+
+
+
+
+</body>
+</html>
