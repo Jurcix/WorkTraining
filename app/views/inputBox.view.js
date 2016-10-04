@@ -7,12 +7,11 @@ var MainView = Backbone.View.extend({
         this.render(options);
     },
     render: function () {
-        var someHtml = _.templateFromUrl("./app/templates/inputBox.template.html");
+        var inputHtml = _.templateFromUrl("./app/templates/inputBox.template.html");
         var canvasHtml = _.templateFromUrl("./app/templates/canvas.template.html");
         this.$el.find("#canvas").html(canvasHtml());
-console.log(canvasHtml());
-        this.$el.find('#input1').html(someHtml({ind: 1}));
-        this.$el.find('#input2').html(someHtml({ind: 2}));
+        this.$el.find('#input1').html(inputHtml({ind: 1}));
+        this.$el.find('#input2').html(inputHtml({ind: 2}));
     },
     events: {
         //'change input': 'drawRectangle'
@@ -20,11 +19,16 @@ console.log(canvasHtml());
     },
     getValue: function (evt) {
         var target = $(evt.currentTarget);
-        data = {};
-        data[target.attr('data-coord')] = parseInt(target.val(), 10);
-        var index = parseInt(target.attr('index'), 10);
+    //    var validate
+        value = parseInt(target.val(), 10);
+        if (value > 0 || value < 101) {
+            data = {};
+            data[target.attr('data-coord')] = value;
+            var index = parseInt(target.attr('index'), 10);
+            this.collection.at(index - 1).set(data);
+        } else {
 
-        this.collection.at(index - 1).set(data);
+        }
     },
 // draws rectangles in canvas every time input changes
     drawRectangles: function () {
