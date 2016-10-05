@@ -1,4 +1,3 @@
-
 var MainView = Backbone.View.extend({
     el: $("#my-app"),
     initialize: function (options) {
@@ -15,20 +14,27 @@ var MainView = Backbone.View.extend({
     },
     events: {
         //'change input': 'drawRectangle'
-        'change input': 'getValue'
+        'keyup input': 'getValue'
     },
-    getValue: function (evt) {
-        var target = $(evt.currentTarget);
-    //    var validate
-        value = parseInt(target.val(), 10);
-        if (value > 0 || value < 101) {
-            data = {};
-            data[target.attr('data-coord')] = value;
-            var index = parseInt(target.attr('index'), 10);
-            this.collection.at(index - 1).set(data);
-        } else {
+    getValue: function () {
+        var target = $(':focus');
+        console.log(target);
+        var value = parseInt(target.val(), 10);
+        var data = {};
+        data[target.attr('data-coord')] = value;
+        var index = parseInt(target.attr('index'), 10);
+        var rectangle = this.collection.at(index - 1);
+        rectangle.set(data);
 
+        if (!rectangle.isValid()) {
+            target.addClass('invalide');
+            data[target.attr('data-coord')] = 0;
+            rectangle.set(data);
+        } else if (rectangle.isValid()) {
+            target.removeClass('invalide');
         }
+
+
     },
 // draws rectangles in canvas every time input changes
     drawRectangles: function () {

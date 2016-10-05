@@ -21,5 +21,20 @@ var Rectangle = Backbone.Model.extend({
             x2: x2,
             y2: y2
         });
+    },
+    validate: function (attrs){
+        if (attrs.x>100 || attrs.x<0 ){
+            console.log(attrs.x);
+            return 'Enter numbers from 0 to 100'
+        }
+        if (attrs.y>100 || attrs.y<0){
+            return 'Enter numbers from 0 to 100'
+        }
+        if (attrs.width>100 || attrs.width<0){
+            return 'Enter numbers from 0 to 100'
+        }
+        if (attrs.height>100 || attrs.height<0){
+            return 'Enter numbers from 0 to 100'
+        }
     }
 });
