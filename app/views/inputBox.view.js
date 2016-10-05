@@ -30,8 +30,10 @@ var MainView = Backbone.View.extend({
             target.addClass('invalide');
             data[target.attr('data-coord')] = 0;
             rectangle.set(data);
+            $('.box').append('<div class="alert alert-danger" role="alert">' + rectangle.validationError + '</div>');
         } else if (rectangle.isValid()) {
             target.removeClass('invalide');
+            $('.alert').detach();
         }
 
 
