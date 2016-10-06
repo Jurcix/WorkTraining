@@ -11,6 +11,7 @@ var MainView = Backbone.View.extend({
         this.$el.find("#canvas").html(canvasHtml());
         this.$el.find('#input1').html(inputHtml({ind: 1}));
         this.$el.find('#input2').html(inputHtml({ind: 2}));
+        var alert;
     },
     events: {
         //'change input': 'drawRectangle'
@@ -30,10 +31,14 @@ var MainView = Backbone.View.extend({
             target.addClass('invalide');
             data[target.attr('data-coord')] = 0;
             rectangle.set(data);
-            $('.box').append('<div class="alert alert-danger" role="alert">' + rectangle.validationError + '</div>');
+            if (alert === undefined) {
+                $('#alert').append('<div class="alert alert-danger" role="alert">' + rectangle.validationError + '</div>');
+                alert = 1;
+            }
         } else if (rectangle.isValid()) {
             target.removeClass('invalide');
             $('.alert').detach();
+            alert = undefined;
         }
 
 
