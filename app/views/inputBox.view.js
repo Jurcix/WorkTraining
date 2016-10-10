@@ -3,9 +3,9 @@ var MainView = Backbone.View.extend({
     initialize: function (options) {
         this.collection = new RectanglesCollection([new Rectangle(), new Rectangle()]);
         this.collection.on('change', this.drawRectangles.bind(this));
-        this.collection.forEach(this.collection.once("invalid", function (arr, error) {
+        this.collection.on('invalid', function (arr, error) {
             $('#alert').append('<div class="alert alert-danger" role="alert">' + error + '</div>');
-        }));
+        });
 
 
         this.render(options);
@@ -33,10 +33,13 @@ var MainView = Backbone.View.extend({
         var rectangle = this.collection.at(index - 1);
         rectangle.set(data, {validate: true});
 
-        // if (rectangle.isValid()) {
-        //         //target.removeClass('invalide');
-        //         $('.alert').detach();
-        //         alert = undefined;}
+        if (!rectangle.validationError) {
+            target.removeClass('invalide');
+            $('.alert').detach();
+        }
+        if(rectangle.validationError){
+            target.addClass('invalide')
+        }
 
         // rectangle.on("invalid", function () {
         //     console.log(target);
