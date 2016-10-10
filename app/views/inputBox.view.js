@@ -3,6 +3,11 @@ var MainView = Backbone.View.extend({
     initialize: function (options) {
         this.collection = new RectanglesCollection([new Rectangle(), new Rectangle()]);
         this.collection.on('change', this.drawRectangles.bind(this));
+        this.collection.forEach(this.collection.once("invalid", function (arr, error) {
+            $('#alert').append('<div class="alert alert-danger" role="alert">' + error + '</div>');
+        }));
+
+
         this.render(options);
     },
     render: function () {
@@ -16,29 +21,47 @@ var MainView = Backbone.View.extend({
         //'change input': 'drawRectangle'
         'keyup input': 'getValue'
     },
-    getValue: function () {
-        var target = $(':focus');
+    getValue: function (event) {
+        console.log(event.target.attributes);
+        var target = $(event.currentTarget);
         console.log(target);
-        var value = parseInt(target.val(), 10);
+        var value = event.target.value;
         var data = {};
         data[target.attr('data-coord')] = value;
-        var index = parseInt(target.attr('index'), 10);
+        console.log(data[target.attr('data-coord')]);
+        var index = parseInt(event.target.attributes[4].value, 10);
         var rectangle = this.collection.at(index - 1);
-        rectangle.set(data);
+        rectangle.set(data, {validate: true});
 
-        if (!rectangle.isValid()) {
-            target.addClass('invalide');
-            data[target.attr('data-coord')] = 0;
-            rectangle.set(data);
-            if (alert === undefined) {
-                $('#alert').append('<div class="alert alert-danger" role="alert">' + rectangle.validationError + '</div>');
-                alert = 1;
-            }
-        } else if (rectangle.isValid()) {
-            target.removeClass('invalide');
-            $('.alert').detach();
-            alert = undefined;
-        }
+        // if (rectangle.isValid()) {
+        //         //target.removeClass('invalide');
+        //         $('.alert').detach();
+        //         alert = undefined;}
+
+        // rectangle.on("invalid", function () {
+        //     console.log(target);
+        //    target.addClass('invalide');
+        //     data[event.target.attributes[2].value] = 0;
+        //     rectangle.set(data);
+        //     if (alert === undefined) {
+        //         $('#alert').append('<div class="alert alert-danger" role="alert">' + rectangle.validationError + '</div>');
+        //         var alert = 1;
+        //     }
+        // });
+
+        // if (!rectangle.isValid()) {
+        //     target.addClass('invalide');
+        //     data[el.target.attributes[2].value] = 0;
+        //     rectangle.set(data);
+        //     if (alert === undefined) {
+        //         $('#alert').append('<div class="alert alert-danger" role="alert">' + rectangle.validationError + '</div>');
+        //         var alert = 1;
+        //     }
+        // } else if (rectangle.isValid()) {
+        //     target.removeClass('invalide');
+        //     $('.alert').detach();
+        //     alert = undefined;
+        // }
 
 
     },

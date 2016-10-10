@@ -1,6 +1,7 @@
 $('document').ready(function () {
         var mainView = new MainView({
-            el: $("#my-app")
+            el: $("#my-app"),
+            model: Rectangle
         });
     }
 );

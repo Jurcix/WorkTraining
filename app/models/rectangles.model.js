@@ -11,10 +11,18 @@ var Rectangle = Backbone.Model.extend({
     initialize: function () {
         console.log('rectangle has been initialized');
 
-        // on attribute change calculates diagonal coordinates of rectangle
-        this.on('change', this.calcCoord)
+        // on attribute change parse to number and calculates diagonal coordinates of rectangle
+        this.on('change', this.parseToNumber)
     },
-    calcCoord: function () {
+    parseToNumber: function () {
+        var parser = {};
+
+        for (var key in this.attributes){
+            console.log (this.attributes[key]);
+            parser[key] = parseInt(this.attributes[key], 10)
+        }
+        this.set(parser);
+
         var x2 = this.attributes.x + this.attributes.width;
         var y2 = this.attributes.y + this.attributes.height;
         this.set({
