@@ -63,3 +63,7 @@
     margin-top: 5px;
     aria-describedby: sizingaddon2;
 }
+
+.invalide{
+    border-color: #c12e2a;
+}

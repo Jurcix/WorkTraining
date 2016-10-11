@@ -1,30 +1,72 @@
-
 var MainView = Backbone.View.extend({
     el: $("#my-app"),
     initialize: function (options) {
         this.collection = new RectanglesCollection([new Rectangle(), new Rectangle()]);
         this.collection.on('change', this.drawRectangles.bind(this));
+        this.collection.on('invalid', function (arr, error) {
+            $('#alert').append('<div class="alert alert-danger" role="alert">' + error + '</div>');
+        });
+
+
         this.render(options);
     },
     render: function () {
-        var someHtml = _.templateFromUrl("./app/templates/inputBox.template.html");
+        var inputHtml = _.templateFromUrl("./app/templates/inputBox.template.html");
         var canvasHtml = _.templateFromUrl("./app/templates/canvas.template.html");
         this.$el.find("#canvas").html(canvasHtml());
-console.log(canvasHtml());
-        this.$el.find('#input1').html(someHtml({ind: 1}));
-        this.$el.find('#input2').html(someHtml({ind: 2}));
+        this.$el.find('#input1').html(inputHtml({ind: 1}));
+        this.$el.find('#input2').html(inputHtml({ind: 2}));
     },
     events: {
         //'change input': 'drawRectangle'
-        'change input': 'getValue'
+        'keyup input': 'getValue'
     },
-    getValue: function (evt) {
-        var target = $(evt.currentTarget);
-        data = {};
-        data[target.attr('data-coord')] = parseInt(target.val(), 10);
-        var index = parseInt(target.attr('index'), 10);
+    getValue: function (event) {
+        console.log(event.target.attributes);
+        var target = $(event.currentTarget);
+        console.log(target);
+        var value = event.target.value;
+        var data = {};
+        data[target.attr('data-coord')] = value;
+        console.log(data[target.attr('data-coord')]);
+        var index = parseInt(event.target.attributes[4].value, 10);
+        var rectangle = this.collection.at(index - 1);
+        rectangle.set(data, {validate: true});
 
-        this.collection.at(index - 1).set(data);
+        if (!rectangle.validationError) {
+            target.removeClass('invalide');
+            $('.alert').detach();
+        }
+        if(rectangle.validationError){
+            target.addClass('invalide')
+        }
+
+        // rectangle.on("invalid", function () {
+        //     console.log(target);
+        //    target.addClass('invalide');
+        //     data[event.target.attributes[2].value] = 0;
+        //     rectangle.set(data);
+        //     if (alert === undefined) {
+        //         $('#alert').append('<div class="alert alert-danger" role="alert">' + rectangle.validationError + '</div>');
+        //         var alert = 1;
+        //     }
+        // });
+
+        // if (!rectangle.isValid()) {
+        //     target.addClass('invalide');
+        //     data[el.target.attributes[2].value] = 0;
+        //     rectangle.set(data);
+        //     if (alert === undefined) {
+        //         $('#alert').append('<div class="alert alert-danger" role="alert">' + rectangle.validationError + '</div>');
+        //         var alert = 1;
+        //     }
+        // } else if (rectangle.isValid()) {
+        //     target.removeClass('invalide');
+        //     $('.alert').detach();
+        //     alert = undefined;
+        // }
+
+
     },
 // draws rectangles in canvas every time input changes
     drawRectangles: function () {
