@@ -70,15 +70,15 @@ var MainView = Backbone.View.extend({
 
 // on button click saves rectangles to database
     saveRectangles: function () {
-        var testing = {};
+        var attrsToSend = {};
 
         for (var i = 0; i < 2; i++) {
             for (key in this.collection.at(i).attributes) {
                 if (key !== '_id' && key !== '_createdAt' && key !== '_updatedAt') {
-                    testing[key] = this.collection.at(i).attributes[key];
+                    attrsToSend[key] = this.collection.at(i).attributes[key];
                 }
             }
-            this.collection.at(i).save(testing, {patch: true, patchAction: "update"});
+            this.collection.at(i).save(attrsToSend, {patch: true, patchAction: "update"});
         }
     }
 });
