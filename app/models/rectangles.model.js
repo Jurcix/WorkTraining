@@ -22,7 +22,6 @@ var Rectangle = Backbone.Model.extend({
         var parser = {};
 
         for (var key in this.attributes){
-            console.log (this.attributes[key]);
             if (key !== "_id") {
                 parser[key] = parseInt(this.attributes[key], 10)
             }
