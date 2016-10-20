@@ -52,6 +52,7 @@
     position: absolute;
     margin-top: 400px;
     margin-left: 300px;
+    border: 1px solid black;
 }
 
 .input-group-addon{
@@ -66,4 +67,9 @@
 
 .invalide{
     border-color: #c12e2a;
+}
+
+#save{
+    margin-left: 370px;
+    margin-top: 300px;
 }

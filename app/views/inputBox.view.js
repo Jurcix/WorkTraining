@@ -3,12 +3,10 @@ var MainView = Backbone.View.extend({
     initialize: function (options) {
 
         this.collection = new RectanglesCollection([new Rectangle(), new Rectangle()]);
-        this.collection.once('update', this.drawRectangles.bind(this));
-        this.collection.on('change', this.drawRectangles.bind(this));
+        this.collection.on('change update', this.drawRectangles.bind(this));
         this.collection.on('invalid', function (arr, error) {
             $('#alert').append('<div class="alert alert-danger" role="alert">' + error + '</div>');
         });
-
 
         this.render(options);
     },
@@ -18,7 +16,11 @@ var MainView = Backbone.View.extend({
         this.$el.find("#canvas").html(canvasHtml());
         this.$el.find('#input1').html(inputHtml({ind: 1}));
         this.$el.find('#input2').html(inputHtml({ind: 2}));
-        this.collection.fetch();
+        this.collection.fetch({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-Appery-Database-Id', localStorage.getItem('X-Appery-Database-Id'))
+            }
+        });
 
     },
     events: {
@@ -78,7 +80,14 @@ var MainView = Backbone.View.extend({
                     attrsToSend[key] = this.collection.at(i).attributes[key];
                 }
             }
-            this.collection.at(i).save(attrsToSend, {patch: true, patchAction: "update"});
+            this.collection.at(i).save(attrsToSend, {
+                    patch: true, patchAction: "update",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-Appery-Database-Id', localStorage.getItem('X-Appery-Database-Id'),
+                            'X-Appery-Master-Key', localStorage.getItem('X-Appery-Master-Key'))
+                    }
+                });
         }
     }
+
 });

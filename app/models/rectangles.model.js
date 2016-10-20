@@ -21,15 +21,15 @@ var Rectangle = Backbone.Model.extend({
     parseToNumber: function () {
         var parser = {};
 
-        for (var key in this.attributes){
-            if (key !== "_id") {
-                parser[key] = parseInt(this.attributes[key], 10)
-            }
+        for (var key in this.changed){
+            parser[key] = parseInt(this.changed[key],10)
         }
-        this.set(parser);
+
+         this.set(parser);
 
         var x2 = this.attributes.x + this.attributes.width;
         var y2 = this.attributes.y + this.attributes.height;
+
         this.set({
             x2: x2,
             y2: y2
@@ -54,7 +54,7 @@ var Rectangle = Backbone.Model.extend({
 
     sync: function (method, model, options){
         // overriding backbone sync to make PATCH request work as PUT
-        // because apery.io database doesn't accept PATCH requests
+        // because appery.io database doesn't accept PATCH requests
         // also included additional checking so PATCH method
         // can be used in different circumstances
           if (method == 'patch' && options.patchAction) {
