@@ -1,12 +1,12 @@
 var MainView = Backbone.View.extend({
     el: $("#my-app"),
     initialize: function (options) {
+
         this.collection = new RectanglesCollection([new Rectangle(), new Rectangle()]);
-        this.collection.on('change', this.drawRectangles.bind(this));
+        this.collection.on('change update', this.drawRectangles.bind(this));
         this.collection.on('invalid', function (arr, error) {
             $('#alert').append('<div class="alert alert-danger" role="alert">' + error + '</div>');
         });
-
 
         this.render(options);
     },
@@ -16,56 +16,37 @@ var MainView = Backbone.View.extend({
         this.$el.find("#canvas").html(canvasHtml());
         this.$el.find('#input1').html(inputHtml({ind: 1}));
         this.$el.find('#input2').html(inputHtml({ind: 2}));
+        this.collection.fetch({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-Appery-Database-Id', localStorage.getItem('X-Appery-Database-Id'))
+            }
+        });
+
     },
     events: {
-        //'change input': 'drawRectangle'
-        'keyup input': 'getValue'
+        'keyup input': 'getValue',
+        'click #save': 'saveRectangles'
     },
     getValue: function (event) {
-        console.log(event.target.attributes);
+
         var target = $(event.currentTarget);
-        console.log(target);
         var value = event.target.value;
         var data = {};
+
         data[target.attr('data-coord')] = value;
-        console.log(data[target.attr('data-coord')]);
+
         var index = parseInt(event.target.attributes[4].value, 10);
         var rectangle = this.collection.at(index - 1);
+
         rectangle.set(data, {validate: true});
 
         if (!rectangle.validationError) {
             target.removeClass('invalide');
             $('.alert').detach();
         }
-        if(rectangle.validationError){
+        if (rectangle.validationError) {
             target.addClass('invalide')
         }
-
-        // rectangle.on("invalid", function () {
-        //     console.log(target);
-        //    target.addClass('invalide');
-        //     data[event.target.attributes[2].value] = 0;
-        //     rectangle.set(data);
-        //     if (alert === undefined) {
-        //         $('#alert').append('<div class="alert alert-danger" role="alert">' + rectangle.validationError + '</div>');
-        //         var alert = 1;
-        //     }
-        // });
-
-        // if (!rectangle.isValid()) {
-        //     target.addClass('invalide');
-        //     data[el.target.attributes[2].value] = 0;
-        //     rectangle.set(data);
-        //     if (alert === undefined) {
-        //         $('#alert').append('<div class="alert alert-danger" role="alert">' + rectangle.validationError + '</div>');
-        //         var alert = 1;
-        //     }
-        // } else if (rectangle.isValid()) {
-        //     target.removeClass('invalide');
-        //     $('.alert').detach();
-        //     alert = undefined;
-        // }
-
 
     },
 // draws rectangles in canvas every time input changes
@@ -86,5 +67,27 @@ var MainView = Backbone.View.extend({
             ctx.fillStyle = "#FF0000";
             ctx.fillRect(rectangle3.x * size, rectangle3.y * size, rectangle3.width * size, rectangle3.height * size);
         }
+
+    },
+
+// on button click saves rectangles to database
+    saveRectangles: function () {
+        var attrsToSend = {};
+
+        for (var i = 0; i < 2; i++) {
+            for (key in this.collection.at(i).attributes) {
+                if (key !== '_id' && key !== '_createdAt' && key !== '_updatedAt') {
+                    attrsToSend[key] = this.collection.at(i).attributes[key];
+                }
+            }
+            this.collection.at(i).save(attrsToSend, {
+                    patch: true, patchAction: "update",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-Appery-Database-Id', localStorage.getItem('X-Appery-Database-Id'),
+                            'X-Appery-Master-Key', localStorage.getItem('X-Appery-Master-Key'))
+                    }
+                });
+        }
     }
+
 });

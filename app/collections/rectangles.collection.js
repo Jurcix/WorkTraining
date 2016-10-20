@@ -1,8 +1,9 @@
 
 var RectanglesCollection = Backbone.Collection.extend({
     model: Rectangle,
+    url: 'https://api.appery.io/rest/1/db/collections/Rectangles/',
     initialize: function () {
-        this.on('change', this.getIntersection)
+        this.on('change update', this.getIntersection);
     },
     getIntersection: function () {
         var rectangle = [];
@@ -36,6 +37,8 @@ var RectanglesCollection = Backbone.Collection.extend({
             this.remove(this.at(2));
 
         }
+
+
     }
 
 });
